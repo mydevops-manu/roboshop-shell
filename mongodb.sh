@@ -46,7 +46,7 @@ systemctl enable mongod &>> $LOGFILE
 
 CHECK $? "enable mongod"
 
-systemctl enable mongod &>> $LOGFILE
+systemctl start mongod &>> $LOGFILE
 
 CHECK $? "start mongod"
 
