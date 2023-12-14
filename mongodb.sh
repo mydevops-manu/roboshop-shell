@@ -20,7 +20,6 @@ CHECK(){
     else
         echo -e "$2 $G Success $N"
         #echo -e "$G Successfully $N installed $2" &>> $LOGFILE
-        $2 --version &>> $LOGFILE
     fi
 }
 
@@ -59,4 +58,4 @@ systemctl restart mongod &>> $LOGFILE
 
 CHECK $? "Restart mongo service"
 
-echo "script stared at $TIMESTAMP"
+echo "script ended at $TIMESTAMP"
