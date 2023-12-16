@@ -19,7 +19,7 @@ then
     exit 1
 else
     echo "Root access confirmed..." &>> $LOGFILE
-    echo "Installing ..." &>> $LOGFILE
+    echo "Installing..." &>> $LOGFILE
 fi
 
 CHECK(){
