@@ -11,18 +11,6 @@ LOGFILE="/tmp/$0-$TIMESTAMP.log"
 echo "script stared at $TIMESTAMP" 
 echo "script stared at $TIMESTAMP" &>> $LOGFILE
 
-CHECK(){
-
-    if [ $1 -ne 0 ]
-    then
-        echo -e "ERROR:: $2 installation $R failed $N" &>> $LOGFILE
-        exit 1
-    else
-        echo -e "$2 $G Success $N"
-        
-    fi
-}
-
 echo "checking root access..." &>> $LOGFILE
 
 if [ $ID -ne 0 ]
@@ -33,6 +21,17 @@ else
     echo "Root access confirmed..." &>> $LOGFILE
     echo "Installing ..." &>> $LOGFILE
 fi
+
+CHECK(){
+
+    if [ $1 -ne 0 ]
+    then
+        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE
+        exit 1
+    else
+        echo -e "$2 $G Success $N" &>> $LOGFILE       
+    fi
+}
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
 
