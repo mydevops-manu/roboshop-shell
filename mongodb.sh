@@ -50,7 +50,7 @@ systemctl start mongod &>> $LOGFILE
 
 CHECK $? "start mongod"
 
-sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf &>> $LOGFILE
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> $LOGFILE
 
 CHECK $? "Remote access to mongodb" 
 
