@@ -19,7 +19,7 @@ CHECK(){
         exit 1
     else
         echo -e "$2 $G Success $N"
-        #echo -e "$G Successfully $N installed $2" &>> $LOGFILE
+        
     fi
 }
 
@@ -31,7 +31,7 @@ then
     exit 1
 else
     echo "Root access confirmed..." &>> $LOGFILE
-    echo "Installing Mysql..." &>> $LOGFILE
+    echo "Installing ..." &>> $LOGFILE
 fi
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
