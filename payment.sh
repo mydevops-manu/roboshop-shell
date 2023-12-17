@@ -3,6 +3,7 @@
 ID=$(id -u)
 R="\e[31m"
 G="\e[32m"
+Y="\e[33m"
 N="\e[0m"
 
 
@@ -69,7 +70,7 @@ cd /app &>> $LOGFILE
 
 CHECK $? "changing to app directory"     
 
-unzip /tmp/payment.zip &>> $LOGFILE
+unzip -o /tmp/payment.zip &>> $LOGFILE
 
 CHECK $? "unzipping payment"     
 
