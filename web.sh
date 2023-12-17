@@ -3,6 +3,7 @@
 ID=$(id -u)
 R="\e[31m"
 G="\e[32m"
+Y="\e[33m"
 N="\e[0m"
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
@@ -41,41 +42,41 @@ CHECK(){
 
 #################   INSTALLING WEB STARTED  ##############################
 
-dnf install nginx -y
+dnf install nginx -y &>> $LOGFILE
 
-CHECK $? "Installing nginx" &>> $LOGFILE
+CHECK $? "Installing nginx" 
 
-systemctl enable nginx
+systemctl enable nginx &>> $LOGFILE
 
-CHECK $? "enabling nginx" &>> $LOGFILE
+CHECK $? "enabling nginx" 
 
-systemctl start nginx
+systemctl start nginx &>> $LOGFILE
 
-CHECK $? "starting nginx" &>> $LOGFILE
+CHECK $? "starting nginx" 
 
 rm -rf /usr/share/nginx/html/*
 
-CHECK $? "removing default website" &>> $LOGFILE
+CHECK $? "removing default website" 
 
-curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip
+curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip &>> $LOGFILE
 
-CHECK $? "downloading website" &>> $LOGFILE
+CHECK $? "downloading website" 
 
-cd /usr/share/nginx/html
+cd /usr/share/nginx/html &>> $LOGFILE
 
-CHECK $? "changing to /usr/share/nginx/html directory" &>> $LOGFILE
+CHECK $? "changing to /usr/share/nginx/html directory" 
 
-unzip /tmp/web.zip
+unzip /tmp/web.zip &>> $LOGFILE
 
-CHECK $? "unzipping web application" &>> $LOGFILE
+CHECK $? "unzipping web application" 
 
-cp /home/centos/roboshop-shell/roboshop.conf /etc/nginx/default.d/roboshop.conf 
+cp /home/centos/roboshop-shell/roboshop.conf /etc/nginx/default.d/roboshop.conf &>> $LOGFILE
 
-CHECK $? "copying application service" &>> $LOGFILE
+CHECK $? "copying application service" 
 
-systemctl restart nginx 
+systemctl restart nginx &>> $LOGFILE
 
-CHECK $? "restarting nginx" &>> $LOGFILE
+CHECK $? "restarting nginx" 
 
 echo "script ended at $TIMESTAMP" 
 
