@@ -5,6 +5,7 @@ R="\e[31m"
 G="\e[32m"
 N="\e[0m"
 
+
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
@@ -39,19 +40,11 @@ CHECK(){
 
 #################    CHECKING INSTALLATIONS COMPLETED   ###################
 
-#################   INSTALLING CART STARTED  ##############################
+#################   INSTALLING PAYMENT STARTED  ##############################
 
-dnf module disable nodejs -y
+dnf install python36 gcc python3-devel -y
 
-CHECK $? "disabling nodejs" &>> $LOGFILE
-
-dnf module enable nodejs:18 -y
-
-CHECK $? "enabling nodejs:18 module" &>> $LOGFILE
-
-dnf install nodejs -y
-
-CHECK $? "installing nodejs" &>> $LOGFILE
+CHECK $? "Installing python 3.6"
 
 id roboshop
 
@@ -66,38 +59,44 @@ fi
 
 mkdir -p /app
 
-CHECK $? "creating app directory" &>> $LOGFILE
+CHECK $? "CREATING /app directory" &>> $LOGFILE
 
-curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip
+curl -L -o /tmp/payment.zip https://roboshop-builds.s3.amazonaws.com/payment.zip
 
-CHECK $? "Downloading web-application" &>> $LOGFILE
+CHECK $? "downloading code application" &>> $LOGFILE
 
 cd /app
 
-CHECK $? "changing to /app directory" &>> $LOGFILE
+CHECK $? "changing to app directory" &>> $LOGFILE
 
-npm install 
+unzip /tmp/payment.zip
 
-CHECK $? "installing dependencies" &>> $LOGFILE
+CHECK $? "unzipping payment" &>> $LOGFILE
 
-cp /home/centos/roboshop-shell/cart.service /etc/systemd/system/cart.service
+cd /app
 
-CHECK $? "copying cart repo" &>> $LOGFILE
+CHECK $? "changing to app directory" &>> $LOGFILE
+
+pip3.6 install -r requirements.txt
+
+CHECK $? "Installing dependencies" &>> $LOGFILE
+
+cp /home/centos/roboshop-shell/payment.service /etc/systemd/system/payment.service
+
+CHECK $? "copying payment service file" &>> $LOGFILE
 
 systemctl daemon-reload
 
-CHECK $? "Reloading daemon" &>> $LOGFILE
+CHECK $? "reloading daemon" &>> $LOGFILE
+
+systemctl enable payment 
+
+CHECK $? "enabling payment" &>> $LOGFILE
+
+systemctl start payment 
+
+CHECK $? "starting payment" &>> $LOGFILE
 
 echo "script ended at $TIMESTAMP" 
 
-#################     INSTALLING MONGODB COMPLETED  ######################
-
-
-
-
-
-
-
-
-
-
+#################     INSTALLING PAYMENT COMPLETED  ######################

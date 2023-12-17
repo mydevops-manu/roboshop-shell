@@ -44,15 +44,15 @@ CHECK(){
 
 dnf module disable nodejs -y
 
-CHECK $? "DisablIng nodejs module"
+CHECK $? "DisablIng nodejs module" &>> $LOGFILE
 
 dnf module enable nodejs:18 -y
 
-CHECK $? "Enabling nodejs:18 module"
+CHECK $? "Enabling nodejs:18 module" &>> $LOGFILE
 
 dnf install nodejs -y
 
-CHECK $? "Installing nodejs"
+CHECK $? "Installing nodejs" &>> $LOGFILE
 
 id roboshop
 
@@ -60,64 +60,64 @@ id roboshop
 if [ $? -ne 0 ]
 then
     useradd roboshop
-    CHECK $? "creating roboshop user"
+    CHECK $? "creating roboshop user" &>> $LOGFILE
 else   
-    echo "user already exists $Y SKIPPING... $N"
+    echo "user already exists $Y SKIPPING... $N" &>> $LOGFILE
 done
 
 mkdir -p /app
 
-CHECK $? "creating app directory"
+CHECK $? "creating app directory" &>> $LOGFILE
 
 curl -L -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip
 
-CHECK $? "Downloading web-application"
+CHECK $? "Downloading web-application" &>> $LOGFILE
 
 cd /app 
 
-CHECK $? "changing to app/ directory"
+CHECK $? "changing to app/ directory" &>> $LOGFILE
 
 unzip /tmp/user.zip
 
-CHECK $? "unzipping user"
+CHECK $? "unzipping user" &>> $LOGFILE
 
 cd /app 
 
-CHECK $? "changing to app/ directory"
+CHECK $? "changing to app/ directory" &>> $LOGFILE
 
 npm install
 
-CHECK $? "Installing dependencies"
+CHECK $? "Installing dependencies" &>> $LOGFILE
 
 cp /home/centos/roboshop-shell/user.service /etc/systemd/system/user.service
 
-CHECK $? "copying user service"
+CHECK $? "copying user service" &>> $LOGFILE
 
 systemctl daemon-reload
 
-CHECK $? "Reloading daemon"
+CHECK $? "Reloading daemon" &>> $LOGFILE
 
 systemctl enable user 
 
-CHECK $? "enabling user"
+CHECK $? "enabling user" &>> $LOGFILE
 
 systemctl start user
 
-CHECK $? "starting user"
-
+CHECK $? "starting user" &>> $LOGFILE
+ 
 cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
-CHECK $? "copying mongo repo"
+CHECK $? "copying mongo repo" &>> $LOGFILE
 
 dnf install mongodb-org-shell -y
 
-CHECK $? "Installing mongo shell"
+CHECK $? "Installing mongo shell" &>> $LOGFILE
 
 mongo --host $MONGO_HOST </app/schema/user.js
 
-CHECK $? "Loading schema to mongodb"
+CHECK $? "Loading schema to mongodb" &>> $LOGFILE
 
-echo "script ended at $TIMESTAMP"
+echo "script ended at $TIMESTAMP" &>> $LOGFILE
 
 #################     INSTALLING USER COMPLETED  ######################
 

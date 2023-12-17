@@ -5,6 +5,7 @@ R="\e[31m"
 G="\e[32m"
 N="\e[0m"
 
+
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
@@ -39,19 +40,11 @@ CHECK(){
 
 #################    CHECKING INSTALLATIONS COMPLETED   ###################
 
-#################   INSTALLING CART STARTED  ##############################
+#################   INSTALLING DISPATCH STARTED  ##############################
 
-dnf module disable nodejs -y
+dnf install golang -y
 
-CHECK $? "disabling nodejs" &>> $LOGFILE
-
-dnf module enable nodejs:18 -y
-
-CHECK $? "enabling nodejs:18 module" &>> $LOGFILE
-
-dnf install nodejs -y
-
-CHECK $? "installing nodejs" &>> $LOGFILE
+CHECK $? "Installing golang" &>> $LOGFILE
 
 id roboshop
 
@@ -66,38 +59,54 @@ fi
 
 mkdir -p /app
 
-CHECK $? "creating app directory" &>> $LOGFILE
+CHECK $? "creating /app directory" &>> $LOGFILE
 
-curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip
+curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip
 
-CHECK $? "Downloading web-application" &>> $LOGFILE
+CHECK $? "downloading web-application" &>> $LOGFILE
 
-cd /app
+cd /app 
 
-CHECK $? "changing to /app directory" &>> $LOGFILE
+CHECK $? "changing directory" &>> $LOGFILE
 
-npm install 
+unzip /tmp/dispatch.zip
 
-CHECK $? "installing dependencies" &>> $LOGFILE
+CHECK $? "unzipping web application" &>> $LOGFILE
 
-cp /home/centos/roboshop-shell/cart.service /etc/systemd/system/cart.service
+cd /app 
 
-CHECK $? "copying cart repo" &>> $LOGFILE
+CHECK $? "changing directory" &>> $LOGFILE
+
+go mod init dispatch
+
+CHECK $? "go mod init" &>> $LOGFILE
+
+go get 
+
+CHECK $? "go get" &>> $LOGFILE
+
+go build
+
+CHECK $? "go build" &>> $LOGFILE
+
+cp /home/centos/roboshop-shell/dispatch.service /etc/systemd/system/dispatch.service
+
+CHECK $? "copying web application" &>> $LOGFILE
 
 systemctl daemon-reload
 
-CHECK $? "Reloading daemon" &>> $LOGFILE
+CHECK $? "reloading daemon" &>> $LOGFILE
+
+systemctl enable dispatch 
+
+CHECK $? "enabling dispatch" &>> $LOGFILE
+
+systemctl start dispatch
+
+CHECK $? "starting dispatch" &>> $LOGFILE
 
 echo "script ended at $TIMESTAMP" 
 
-#################     INSTALLING MONGODB COMPLETED  ######################
-
-
-
-
-
-
-
-
+#################     INSTALLING DISPATCH COMPLETED  ######################
 
 
