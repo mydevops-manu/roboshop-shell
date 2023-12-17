@@ -3,8 +3,9 @@
 ID=$(id -u)
 R="\e[31m"
 G="\e[32m"
+Y="\e[33m"
 N="\e[0m"
-#MYSQL_IP=0.0.0.0
+MYSQL_IP=mysql.mydevopss.online
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
@@ -69,7 +70,7 @@ cd /app &>> $LOGFILE
 
 CHECK "changing to app directory"  
 
-unzip /tmp/shipping.zip &>> $LOGFILE 
+unzip -o /tmp/shipping.zip &>> $LOGFILE 
 
 CHECK $? "unzipping the web application"  
 
