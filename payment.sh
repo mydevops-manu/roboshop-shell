@@ -55,7 +55,7 @@ then
     useradd roboshop &>> $LOGFILE
     CHECK $? "creating roboshop user"     
 else   
-    echo "user already exists $Y SKIPPING... $N" &>> $LOGFILE     
+    echo -e "user already exists $Y SKIPPING... $N" &>> $LOGFILE     
 fi
 
 mkdir -p /app &>> $LOGFILE
