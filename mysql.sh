@@ -44,7 +44,7 @@ CHECK(){
 
 dnf module disable mysql -y &>> $LOGFILE
 
-CHECK $? "DisablIng mysql module"      
+CHECK $? "Disabling mysql module"      
 
 cp /home/centos/roboshop-shell/mysql.repo /etc/yum.repos.d/mysql.repo &>> $LOGFILE
 
@@ -65,10 +65,6 @@ CHECK $? "starting mysql"
 mysql_secure_installation --set-root-pass RoboShop@1 &>> $LOGFILE
 
 CHECK $? "setting root passwd"      
-
-mysql -uroot -pRoboShop@1 &>> $LOGFILE
-
-CHECK $? "checking MYSQL login"      
 
 echo "script ended at $TIMESTAMP" &>> $LOGFILE
 
