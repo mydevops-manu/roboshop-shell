@@ -63,7 +63,7 @@ then
     useradd roboshop &>> $LOGFILE
     CHECK $? "roboshop user creation"  
 else
-    echo "roboshop user already exist $Y SKIPPING $N" &>> $LOGFILE  
+    echo -e "roboshop user already exist $Y SKIPPING $N" &>> $LOGFILE  
 fi
 
 mkdir -p /app &>> $LOGFILE
@@ -78,7 +78,7 @@ cd /app &>> $LOGFILE
 
 CHECK $? "Changing directory"  
 
-unzip /tmp/catalogue.zip &>> $LOGFILE
+unzip -o /tmp/catalogue.zip &>> $LOGFILE
 
 CHECK $? "Unzipping Catalogue"  
 
