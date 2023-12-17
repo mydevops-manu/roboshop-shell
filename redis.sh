@@ -3,8 +3,9 @@
 ID=$(id -u)
 R="\e[31m"
 G="\e[32m"
+Y="\e[33m"
 N="\e[0m"
-#MONGO_HOST=0.0.0.0
+
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
@@ -55,7 +56,7 @@ dnf install redis -y  &>> $LOGFILE
 
 CHECK $? "Installing redis"   
 
-sed -i 's/127.0.0.1/0.0.0.0/g /etc/redis.conf'  &>> $LOGFILE
+sed -i 's/127.0.0.1/0.0.0.0/g /etc/redis/redis.conf'  &>> $LOGFILE
 
 CHECK $? "Remote access to redis"   
 
