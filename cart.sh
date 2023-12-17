@@ -61,7 +61,7 @@ then
     useradd roboshop &>> $LOGFILE
     CHECK $? "creating roboshop user"  
 else   
-    echo "user already exists $Y SKIPPING... $N" &>> $LOGFILE  
+    echo -e "user already exists $Y SKIPPING... $N" &>> $LOGFILE  
 fi
 
 mkdir -p /app &>> $LOGFILE
@@ -86,7 +86,15 @@ CHECK $? "copying cart repo"
 
 systemctl daemon-reload &>> $LOGFILE
 
-CHECK $? "Reloading daemon"  
+CHECK $? "Reloading daemon"
+
+systemctl enable cart &>> $LOGIFILE 
+
+CHECK $? "Enabling cart"
+
+systemctl start cart &>> $LOGIFILE
+
+CHECK $? "Starting cart"
 
 echo "script ended at $TIMESTAMP" 
 
