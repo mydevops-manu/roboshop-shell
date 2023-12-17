@@ -54,7 +54,7 @@ systemctl start nginx &>> $LOGFILE
 
 CHECK $? "starting nginx" 
 
-rm -rf /usr/share/nginx/html/*
+rm -rf /usr/share/nginx/html/* &>> $LOGFILE
 
 CHECK $? "removing default website" 
 
