@@ -14,6 +14,7 @@ echo "script stared at $TIMESTAMP" &>> $LOGFILE
 
 echo "checking root access..." &>> $LOGFILE
 
+#######################    CHECKING ROOT ACCESSS   #########################
 if [ $ID -ne 0 ]
 then
     echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE
@@ -23,6 +24,9 @@ else
     echo "Installing..." &>> $LOGFILE
 fi
 
+#######################   CHECKING ROOT ACCESSS COMPLETED   ################
+
+#################    CHECKING INSTALLATIONS SUCESSS OR FAIL   ##############
 CHECK(){
 
     if [ $1 -ne 0 ]
@@ -33,6 +37,10 @@ CHECK(){
         echo "$2 $G success $N" &>> $LOGFILE
     fi
 }
+
+#################    CHECKING INSTALLATIONS COMPLETED   ###################
+
+#################   INSTALLING CATALOGUE STARTED  ###########################
 
 dnf module disable nodejs -y
 
@@ -48,6 +56,7 @@ CHECK $? "Installing nodejs" &>> $LOGFILE
 
 id roboshop 
 
+### CHECKING USER EXISTS OR NOT & ADDING NEW USER IF NOT EXISTS
 if [ $? -ne 0 ]
 then 
     useradd roboshop
@@ -102,7 +111,12 @@ CHECK $? "Installing mongo shell" &>> $LOGFILE
 
 mongo --host $MONGO_HOST </app/schema/catalogue.js
 
-CHECK $? "Loading catalogue into mongo" &>> $LOGFILE
+CHECK $? "Loading catalogue schema into mongodb" &>> $LOGFILE
+
+echo "script ended at $TIMESTAMP"
+
+#################     INSTALLING MONGODB COMPLETED  ######################
+
 
 
 

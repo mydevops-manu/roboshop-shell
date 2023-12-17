@@ -39,33 +39,65 @@ CHECK(){
 
 #################    CHECKING INSTALLATIONS COMPLETED   ###################
 
-#################   INSTALLING MONGODB STARTED  ###########################
+#################   INSTALLING CART STARTED  ##############################
 
-cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
+dnf module disable nodejs -y
 
-CHECK $? "copied mongo repo"
+CHECK $? "disabling nodejs"
 
-dnf install mongodb-org -y &>> $LOGFILE
+dnf module enable nodejs:18 -y
 
-CHECK $? "install mongo-org"
+CHECK $? "enabling nodejs:18 module"
 
-systemctl enable mongod &>> $LOGFILE
+dnf install nodejs -y
 
-CHECK $? "enable mongod"
+CHECK $? "installing nodejs"
 
-systemctl start mongod &>> $LOGFILE
+id roboshop
 
-CHECK $? "start mongod"
+### CHECKING USER EXISTS OR NOT & ADDING NEW USER IF NOT EXISTS
+if [ $? -ne 0 ]
+then
+    useradd roboshop
+    CHECK $? "creating roboshop user"
+else   
+    echo "user already exists $Y SKIPPING... $N"
+done
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> $LOGFILE
+mkdir -p /app
 
-CHECK $? "Remote access to mongodb" 
+CHECK $? "creating app directory"
 
-systemctl restart mongod &>> $LOGFILE
+curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip
 
-CHECK $? "Restart mongo service"
+CHECK $? "Downloading web-application"
+
+cd /app
+
+CHECK $? "changing to /app directory"
+
+npm install 
+
+CHECK $? "installing dependencies"
+
+cp /home/centos/roboshop-shell/cart.service /etc/systemd/system/cart.service
+
+CHECK $? "copying cart repo"
+
+systemctl daemon-reload
+
+CHECK $? "Reloading daemon"
 
 echo "script ended at $TIMESTAMP"
 
 #################     INSTALLING MONGODB COMPLETED  ######################
+
+
+
+
+
+
+
+
+
 
