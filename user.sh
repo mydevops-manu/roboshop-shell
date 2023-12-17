@@ -4,7 +4,7 @@ ID=$(id -u)
 R="\e[31m"
 G="\e[32m"
 N="\e[0m"
-#MONGO_HOST=0.0.0.0
+MONGO_HOST=mongodb.mydevopss.online
 
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
