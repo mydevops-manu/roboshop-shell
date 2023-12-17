@@ -10,18 +10,18 @@ TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
 echo "script stared at $TIMESTAMP" 
-echo "script stared at $TIMESTAMP" &>> $LOGFILE
+echo "script stared at $TIMESTAMP" &>> $LOGFILE  
 
-echo "checking root access..." &>> $LOGFILE
+echo "checking root access..." &>> $LOGFILE  
 
 #######################    CHECKING ROOT ACCESSS   #########################
 if [ $ID -ne 0 ]
 then
-    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE
+    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE   
     exit 1
 else    
-    echo "Root access confirmed" &>> $LOGFILE
-    echo "Installing..." &>> $LOGFILE
+    echo "Root access confirmed" &>> $LOGFILE  
+    echo "Installing..." &>> $LOGFILE   
 fi
 
 #######################   CHECKING ROOT ACCESSS COMPLETED   ################
@@ -31,10 +31,10 @@ CHECK(){
 
     if [ $1 -ne 0 ]
     then
-        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE
+        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE  
         exit 1
     else
-        echo "$2 $G success $N" &>> $LOGFILE
+        echo "$2 $G success $N" &>> $LOGFILE  
     fi
 }
 
@@ -42,76 +42,76 @@ CHECK(){
 
 #################   INSTALLING CATALOGUE STARTED  ###########################
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>> $LOGFILE
 
-CHECK $? "Disabling nodejs module" &>> $LOGFILE
+CHECK $? "Disabling nodejs module"  
 
-dnf module enable nodejs:18 -y
+dnf module enable nodejs:18 -y &>> $LOGFILE
 
-CHECK $? "Enabling nodejs:18 module" &>> $LOGFILE
+CHECK $? "Enabling nodejs:18 module"  
 
-dnf install nodejs -y
+dnf install nodejs -y &>> $LOGFILE
 
-CHECK $? "Installing nodejs" &>> $LOGFILE
+CHECK $? "Installing nodejs"  
 
-id roboshop 
+id roboshop &>> $LOGFILE 
 
 ### CHECKING USER EXISTS OR NOT & ADDING NEW USER IF NOT EXISTS
 if [ $? -ne 0 ]
 then 
-    useradd roboshop
-    CHECK $? "roboshop user creation" &>> $LOGFILE
+    useradd roboshop &>> $LOGFILE
+    CHECK $? "roboshop user creation"  
 else
-    echo "roboshop user already exist $Y SKIPPING $N" &>> $LOGFILE
+    echo "roboshop user already exist $Y SKIPPING $N" &>> $LOGFILE  
 fi
 
-mkdir -p /app
+mkdir -p /app &>> $LOGFILE
 
-CHECK $? "creating directory" &>> $LOGFILE
+CHECK $? "creating directory"  
 
-curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 
-CHECK $? "Downloading catalogue application" &>> $LOGFILE
+CHECK $? "Downloading catalogue application"  
 
-cd /app 
+cd /app &>> $LOGFILE 
 
-CHECK $? "Changing directory" &>> $LOGFILE
+CHECK $? "Changing directory"  
 
-unzip /tmp/catalogue.zip
+unzip /tmp/catalogue.zip &>> $LOGFILE
 
-CHECK $? "Unzipping Catalogue" &>> $LOGFILE
+CHECK $? "Unzipping Catalogue"  
 
-npm install 
+npm install &>> $LOGFILE 
 
-CHECK $? "Installing dependencies" &>> $LOGFILE
+CHECK $? "Installing dependencies"  
 
-cp /home/centos/roboshop-shell/catalouge.service /etc/systemd/system/catalogue.service
+cp /home/centos/roboshop-shell/catalouge.service /etc/systemd/system/catalogue.service &>> $LOGFILE
 
-CHECK $? "Copying catalogue service file" &>> $LOGFILE
+CHECK $? "Copying catalogue service file"  
 
-systemctl daemon-reload
+systemctl daemon-reload &>> $LOGFILE
 
-CHECK $? "Reloading daemon" &>> $LOGFILE
+CHECK $? "Reloading daemon"  
 
-systemctl enable catalogue
+systemctl enable catalogue &>> $LOGFILE
 
-CHECK $? "Enabling catalogue" &>> $LOGFILE
+CHECK $? "Enabling catalogue"  
 
-systemctl start catalogue
+systemctl start catalogue &>> $LOGFILE
 
-CHECK $? "Starting catalogue" &>> $LOGFILE
+CHECK $? "Starting catalogue"  
 
-cp home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
+cp home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
 
-CHECK $? "Copying mongo repo" &>> $LOGFILE
+CHECK $? "Copying mongo repo"  
 
-dnf install mongodb-org-shell -y
+dnf install mongodb-org-shell -y &>> $LOGFILE
 
-CHECK $? "Installing mongo shell" &>> $LOGFILE
+CHECK $? "Installing mongo shell"  
 
-mongo --host $MONGO_HOST </app/schema/catalogue.js
+mongo --host $MONGO_HOST </app/schema/catalogue.js &>> $LOGFILE
 
-CHECK $? "Loading catalogue schema into mongodb" &>> $LOGFILE
+CHECK $? "Loading catalogue schema into mongodb"  
 
 echo "script ended at $TIMESTAMP"
 

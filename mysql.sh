@@ -9,19 +9,19 @@ N="\e[0m"
 TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "script stared at $TIMESTAMP" 
-echo "script stared at $TIMESTAMP" &>> $LOGFILE
+echo "script stared at $TIMESTAMP"
+echo "script stared at $TIMESTAMP" &>> $LOGFILE      
 
-echo "checking root access..." &>> $LOGFILE
+echo "checking root access..." &>> $LOGFILE     
 
 #######################    CHECKING ROOT ACCESSS   #########################
 if [ $ID -ne 0 ]
 then
-    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE
+    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE      
     exit 1
 else
-    echo "Root access confirmed..." &>> $LOGFILE
-    echo "Installing..." &>> $LOGFILE
+    echo "Root access confirmed..." &>> $LOGFILE      
+    echo "Installing..." &>> $LOGFILE     
 fi
 #######################   CHECKING ROOT ACCESSS COMPLETED   ################
 
@@ -31,10 +31,10 @@ CHECK(){
 
     if [ $1 -ne 0 ]
     then
-        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE
+        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE      
         exit 1
     else
-        echo -e "$2 $G Success $N" &>> $LOGFILE       
+        echo -e "$2 $G Success $N" &>> $LOGFILE             
     fi
 }
 
@@ -42,35 +42,35 @@ CHECK(){
 
 #################   INSTALLING MYSQL STARTED  ##############################
 
-dnf module disable mysql -y
+dnf module disable mysql -y &>> $LOGFILE
 
-CHECK $? "DisablIng mysql module" &>> $LOGFILE
+CHECK $? "DisablIng mysql module"      
 
-cp /home/centos/roboshop-shell/mysql.repo /etc/yum.repos.d/mysql.repo
+cp /home/centos/roboshop-shell/mysql.repo /etc/yum.repos.d/mysql.repo &>> $LOGFILE
 
-CHECK $? "copying mysql repo" &>> $LOGFILE
+CHECK $? "copying mysql repo"      
 
-dnf install mysql-community-server -y
+dnf install mysql-community-server -y &>> $LOGFILE
 
-CHECK $? "Installing mysql community server" &>> $LOGFILE
+CHECK $? "Installing mysql community server"      
 
-systemctl enable mysqld
+systemctl enable mysqld &>> $LOGFILE
 
-CHECK $? "enabling mysql" &>> $LOGFILE
+CHECK $? "enabling mysql"      
 
-systemctl start mysqld
+systemctl start mysqld &>> $LOGFILE
 
-CHECK $? "starting mysql" &>> $LOGFILE
+CHECK $? "starting mysql"      
 
-mysql_secure_installation --set-root-pass RoboShop@1
+mysql_secure_installation --set-root-pass RoboShop@1 &>> $LOGFILE
 
-CHECK $? "setting root passwd" &>> $LOGFILE
+CHECK $? "setting root passwd"      
 
-mysql -uroot -pRoboShop@1
+mysql -uroot -pRoboShop@1 &>> $LOGFILE
 
-CHECK $? "checking MYSQL login" &>> $LOGFILE
+CHECK $? "checking MYSQL login"      
 
-echo "script ended at $TIMESTAMP"
+echo "script ended at $TIMESTAMP" &>> $LOGFILE
 
 #################     INSTALLING MYSQL COMPLETED  ######################
 

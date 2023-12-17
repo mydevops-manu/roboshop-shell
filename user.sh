@@ -42,80 +42,80 @@ CHECK(){
 
 #################   INSTALLING USER STARTED  ##############################
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>> $LOGFILE
 
-CHECK $? "DisablIng nodejs module" &>> $LOGFILE
+CHECK $? "DisablIng nodejs module" 
 
-dnf module enable nodejs:18 -y
+dnf module enable nodejs:18 -y &>> $LOGFILE
 
-CHECK $? "Enabling nodejs:18 module" &>> $LOGFILE
+CHECK $? "Enabling nodejs:18 module" 
 
-dnf install nodejs -y
+dnf install nodejs -y &>> $LOGFILE
 
-CHECK $? "Installing nodejs" &>> $LOGFILE
+CHECK $? "Installing nodejs" 
 
-id roboshop
+id roboshop &>> $LOGFILE
 
 ### CHECKING USER EXISTS OR NOT & ADDING NEW USER IF NOT EXISTS
 if [ $? -ne 0 ]
 then
-    useradd roboshop
-    CHECK $? "creating roboshop user" &>> $LOGFILE
+    useradd roboshop &>> $LOGFILE
+    CHECK $? "creating roboshop user" 
 else   
     echo "user already exists $Y SKIPPING... $N" &>> $LOGFILE
 done
 
-mkdir -p /app
+mkdir -p /app &>> $LOGFILE
 
-CHECK $? "creating app directory" &>> $LOGFILE
+CHECK $? "creating app directory" 
 
-curl -L -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip
+curl -L -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip &>> $LOGFILE
 
-CHECK $? "Downloading web-application" &>> $LOGFILE
+CHECK $? "Downloading web-application" 
 
-cd /app 
+cd /app &>> $LOGFILE
 
-CHECK $? "changing to app/ directory" &>> $LOGFILE
+CHECK $? "changing to app/ directory" 
 
-unzip /tmp/user.zip
+unzip -o /tmp/user.zip &>> $LOGFILE
 
-CHECK $? "unzipping user" &>> $LOGFILE
+CHECK $? "unzipping user" 
 
-cd /app 
+cd /app &>> $LOGFILE
 
-CHECK $? "changing to app/ directory" &>> $LOGFILE
+CHECK $? "changing to app/ directory" 
 
-npm install
+npm install &>> $LOGFILE
 
-CHECK $? "Installing dependencies" &>> $LOGFILE
+CHECK $? "Installing dependencies" 
 
-cp /home/centos/roboshop-shell/user.service /etc/systemd/system/user.service
+cp /home/centos/roboshop-shell/user.service /etc/systemd/system/user.service &>> $LOGFILE
 
-CHECK $? "copying user service" &>> $LOGFILE
+CHECK $? "copying user service" 
 
-systemctl daemon-reload
+systemctl daemon-reload &>> $LOGFILE
 
-CHECK $? "Reloading daemon" &>> $LOGFILE
+CHECK $? "Reloading daemon" 
 
-systemctl enable user 
+systemctl enable user &>> $LOGFILE
 
-CHECK $? "enabling user" &>> $LOGFILE
+CHECK $? "enabling user" 
 
-systemctl start user
+systemctl start user &>> $LOGFILE
 
-CHECK $? "starting user" &>> $LOGFILE
+CHECK $? "starting user" 
  
-cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
+cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
 
-CHECK $? "copying mongo repo" &>> $LOGFILE
+CHECK $? "copying mongo repo" 
 
-dnf install mongodb-org-shell -y
+dnf install mongodb-org-shell -y &>> $LOGFILE
 
-CHECK $? "Installing mongo shell" &>> $LOGFILE
+CHECK $? "Installing mongo shell" 
 
-mongo --host $MONGO_HOST </app/schema/user.js
+mongo --host $MONGO_HOST </app/schema/user.js &>> $LOGFILE
 
-CHECK $? "Loading schema to mongodb" &>> $LOGFILE
+CHECK $? "Loading schema to mongodb" 
 
 echo "script ended at $TIMESTAMP" &>> $LOGFILE
 

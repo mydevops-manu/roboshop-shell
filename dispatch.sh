@@ -10,18 +10,18 @@ TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
 echo "script stared at $TIMESTAMP" 
-echo "script stared at $TIMESTAMP" &>> $LOGFILE
+echo "script stared at $TIMESTAMP" &>> $LOGFILE  
 
-echo "checking root access..." &>> $LOGFILE
+echo "checking root access..." &>> $LOGFILE 
 
 #######################    CHECKING ROOT ACCESSS   #########################
 if [ $ID -ne 0 ]
 then
-    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE
+    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE  
     exit 1
 else
-    echo "Root access confirmed..." &>> $LOGFILE
-    echo "Installing..." &>> $LOGFILE
+    echo "Root access confirmed..." &>> $LOGFILE  
+    echo "Installing..." &>> $LOGFILE  
 fi
 #######################   CHECKING ROOT ACCESSS COMPLETED   ################
 
@@ -31,10 +31,10 @@ CHECK(){
 
     if [ $1 -ne 0 ]
     then
-        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE
+        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE  
         exit 1
     else
-        echo -e "$2 $G Success $N" &>> $LOGFILE       
+        echo -e "$2 $G Success $N" &>> $LOGFILE         
     fi
 }
 
@@ -42,70 +42,70 @@ CHECK(){
 
 #################   INSTALLING DISPATCH STARTED  ##############################
 
-dnf install golang -y
+dnf install golang -y &>> $LOGFILE
 
-CHECK $? "Installing golang" &>> $LOGFILE
+CHECK $? "Installing golang"  
 
-id roboshop
+id roboshop &>> $LOGFILE
 
 ### CHECKING USER EXISTS OR NOT & ADDING NEW USER IF NOT EXISTS
 if [ $? -ne 0 ]
 then
-    useradd roboshop
-    CHECK $? "creating roboshop user" &>> $LOGFILE
+    useradd roboshop &>> $LOGFILE
+    CHECK $? "creating roboshop user"  
 else   
-    echo "user already exists $Y SKIPPING... $N" &>> $LOGFILE
+    echo "user already exists $Y SKIPPING... $N" &>> $LOGFILE  
 fi
 
-mkdir -p /app
+mkdir -p /app &>> $LOGFILE
 
-CHECK $? "creating /app directory" &>> $LOGFILE
+CHECK $? "creating /app directory"  
 
-curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip
+curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip &>> $LOGFILE
 
-CHECK $? "downloading web-application" &>> $LOGFILE
+CHECK $? "downloading web-application"  
 
-cd /app 
+cd /app &>> $LOGFILE 
 
-CHECK $? "changing directory" &>> $LOGFILE
+CHECK $? "changing directory"  
 
-unzip /tmp/dispatch.zip
+unzip /tmp/dispatch.zip &>> $LOGFILE
 
-CHECK $? "unzipping web application" &>> $LOGFILE
+CHECK $? "unzipping web application"  
 
-cd /app 
+cd /app &>> $LOGFILE 
 
-CHECK $? "changing directory" &>> $LOGFILE
+CHECK $? "changing directory"  
 
-go mod init dispatch
+go mod init dispatch &>> $LOGFILE
 
-CHECK $? "go mod init" &>> $LOGFILE
+CHECK $? "go mod init"  
 
-go get 
+go get &>> $LOGFILE 
 
-CHECK $? "go get" &>> $LOGFILE
+CHECK $? "go get"  
 
-go build
+go build &>> $LOGFILE
 
-CHECK $? "go build" &>> $LOGFILE
+CHECK $? "go build"  
 
-cp /home/centos/roboshop-shell/dispatch.service /etc/systemd/system/dispatch.service
+cp /home/centos/roboshop-shell/dispatch.service /etc/systemd/system/dispatch.service &>> $LOGFILE
 
-CHECK $? "copying web application" &>> $LOGFILE
+CHECK $? "copying web application"  
 
-systemctl daemon-reload
+systemctl daemon-reload &>> $LOGFILE
 
-CHECK $? "reloading daemon" &>> $LOGFILE
+CHECK $? "reloading daemon"  
 
-systemctl enable dispatch 
+systemctl enable dispatch &>> $LOGFILE 
 
-CHECK $? "enabling dispatch" &>> $LOGFILE
+CHECK $? "enabling dispatch"  
 
-systemctl start dispatch
+systemctl start dispatch &>> $LOGFILE
 
-CHECK $? "starting dispatch" &>> $LOGFILE
+CHECK $? "starting dispatch"  
 
-echo "script ended at $TIMESTAMP" 
+echo "script ended at $TIMESTAMP" &>> $LOGFILE 
 
 #################     INSTALLING DISPATCH COMPLETED  ######################
 

@@ -10,18 +10,18 @@ TIMESTAMP=$(date +%F-%H-%M-%S)
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
 echo "script stared at $TIMESTAMP" 
-echo "script stared at $TIMESTAMP" &>> $LOGFILE
+echo "script stared at $TIMESTAMP"    
 
-echo "checking root access..." &>> $LOGFILE
+echo "checking root access..."    
 
 #######################    CHECKING ROOT ACCESSS   #########################
 if [ $ID -ne 0 ]
 then
-    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE
+    echo -e "$R ERROR $N:: Please run script with root access" &>> $LOGFILE    
     exit 1
 else
-    echo "Root access confirmed..." &>> $LOGFILE
-    echo "Installing..." &>> $LOGFILE
+    echo "Root access confirmed..." &>> $LOGFILE   
+    echo "Installing..." &>> $LOGFILE   
 fi
 #######################   CHECKING ROOT ACCESSS COMPLETED   ################
 
@@ -31,10 +31,10 @@ CHECK(){
 
     if [ $1 -ne 0 ]
     then
-        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE
+        echo -e "ERROR:: $2 $R failed $N" &>> $LOGFILE    
         exit 1
     else
-        echo -e "$2 $G Success $N" &>> $LOGFILE       
+        echo -e "$2 $G Success $N" &>> $LOGFILE           
     fi
 }
 
@@ -42,35 +42,35 @@ CHECK(){
 
 #################   INSTALLING RABBITMQ STARTED  ##############################
 
-curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>> $LOGFILE
 
-CHECK $? "Downloading RabbitMQ repo" &>> $LOGFILE
+CHECK $? "Downloading RabbitMQ repo"    
 
-curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash &>> $LOGFILE
 
-CHECK $? "configuring RabbitMQ repo" &>> $LOGFILE
+CHECK $? "configuring RabbitMQ repo"    
 
-dnf install rabbitmq-server -y 
+dnf install rabbitmq-server -y &>> $LOGFILE
 
-CHECK $? "Installing rabbitMQ server" &>> $LOGFILE
+CHECK $? "Installing rabbitMQ server"    
 
-systemctl enable rabbitmq-server 
+systemctl enable rabbitmq-server &>> $LOGFILE 
 
-CHECK $? "enabling rabbitmq" &>> $LOGFILE
+CHECK $? "enabling rabbitmq"    
 
-systemctl start rabbitmq-server 
+systemctl start rabbitmq-server &>> $LOGFILE 
 
-CHECK $? "starting rabbitmq" &>> $LOGFILE
+CHECK $? "starting rabbitmq"    
 
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop roboshop123 &>> $LOGFILE
 
-CHECK $? "adding user to RabbitMQ" &>> $LOGFILE
+CHECK $? "adding user to RabbitMQ"    
 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>> $LOGFILE
 
-CHECK $? "setting permissions" &>> $LOGFILE
+CHECK $? "setting permissions"    
 
-echo "script ended at $TIMESTAMP"
+echo "script ended at $TIMESTAMP" &>> $LOGFILE
 
 #################     INSTALLING RABBITMQ COMPLETED  ######################
 

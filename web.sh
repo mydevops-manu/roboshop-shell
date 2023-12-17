@@ -66,7 +66,7 @@ cd /usr/share/nginx/html &>> $LOGFILE
 
 CHECK $? "changing to /usr/share/nginx/html directory" 
 
-unzip /tmp/web.zip &>> $LOGFILE
+unzip -o /tmp/web.zip &>> $LOGFILE
 
 CHECK $? "unzipping web application" 
 
