@@ -7,6 +7,7 @@ INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipp
 for  i in "${INSTANCES[@]}"
 do 
     if [ $i -eq mongodb ] || [ $i -eq mongodb ] || [ $i -eq mongodb ]
+    then
         $INSTANCE_TYPE="t3.small";
     else
         $INSTANCE_TYPE="t2.micro";
